@@ -11,10 +11,40 @@
                     <span class="logo-text">Music App</span>
                 </router-link>
                 <span class="menu">
-                    <li><router-link to="/register">Register</router-link></li>
-                    <li><router-link to="/login">Login</router-link></li>
+                    <li v-if="isLoggedIn === false"><router-link to="/register">Register</router-link></li>
+                    <li v-if="isLoggedIn === false"><router-link to="/login">Login</router-link></li>
+                    <li v-if="isLoggedIn === true"><router-link to="/profile">Profile</router-link></li>
+                    <li v-if="isLoggedIn === true"><a href="/" @click="logout">Logout</a></li>
                 </span>
             </ul>
         </nav>
     </header>
 </template>
+
+
+<script>
+export default {
+    name: 'NavBar',
+    mounted() {
+        if (typeof(localStorage.getItem('ma-t')) === 'string' && localStorage.getItem('ma-t').length > 0 && typeof(localStorage.getItem('ma-ue')) === 'string' && localStorage.getItem('ma-ue').length > 0) {
+            this.isLoggedIn = true;
+            this.userEmail = localStorage.getItem('ma-ue');
+        } else {
+            this.isLoggedIn = false;
+        }
+    },
+    data() {
+        return {
+            userEmail: "",
+            isLoggedIn: false
+        }
+    },
+    methods: {
+        logout() {
+            localStorage.clear()
+            this.isLoggedIn = false;
+            this.$router.push('/');
+        }
+    }
+}
+</script>

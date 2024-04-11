@@ -1,8 +1,10 @@
 <script setup>
+import NavBar from '@/components/NavBar.vue';
 import { RouterLink } from 'vue-router';
 </script>
 
 <template>
+    <NavBar />
     <div class="content">
         <div class="row">
             <div class="col-12">
