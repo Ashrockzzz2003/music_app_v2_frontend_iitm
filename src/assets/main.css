@@ -151,7 +151,7 @@ main {
   position: relative;
 }
 
-.logo i svg {
+.logo i {
   fill: white;
 }
 
@@ -162,10 +162,6 @@ main {
   color: black;
   border-radius: 24px;
   cursor: pointer;
-}
-
-.logo:hover>i svg {
-  fill: black;
 }
 
 .logo a:hover {
@@ -569,7 +565,9 @@ input[type="file"]::-webkit-file-upload-button:hover {
 /* Popup form */
 .modal {
   display: none;
-  position: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1;
   width: 100%;
   height: 100%;
@@ -613,10 +611,10 @@ input[type="file"]::-webkit-file-upload-button:hover {
 .songList {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  color: white;
 }
 
 .songList .songCard {
@@ -630,6 +628,20 @@ input[type="file"]::-webkit-file-upload-button:hover {
   background-color: rgba(41, 42, 45, 0.4);
   border-radius: 16px;
   border: 1px solid rgba(41, 42, 45, 0.4);
+}
+
+.songList .songCard:hover {
+  background-color: rgba(41, 42, 45, 0.6);
+}
+
+.songCard__details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: fit-content;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .songList .songCard .songCard__image {
@@ -679,10 +691,11 @@ input[type="file"]::-webkit-file-upload-button:hover {
 .songList .songCard .genreChip {
   font-size: 1rem;
   background-color: rgb(0, 0, 0);
+  color: white;
   border-radius: 8px;
   padding: 8px;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -806,9 +819,12 @@ audio {
   cursor: pointer;
   margin: 4px;
   margin-top: 48px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.bigButton i svg {
+.bigButton i {
   vertical-align: middle;
   text-decoration: none;
   font-size: xx-large;
@@ -826,4 +842,18 @@ audio {
 
 .bigButton:hover {
   background-color: rgba(41, 42, 45, 0.4);
+}
+
+.chip {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color: #87c9ff;
+  color: #001755;
+  border: 2px solid #001755;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+  margin-top: 8px;
 }

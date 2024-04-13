@@ -8,11 +8,7 @@ import { RouterLink } from 'vue-router';
     <div class="content">
         <div class="row">
             <div class="col-12">
-                <i class="home_logo material-icons" style="font-size: xx-large;"><svg xmlns="http://www.w3.org/2000/svg"
-                        height="24" viewBox="0 -960 960 960" width="24">
-                        <path
-                            d="M400-120q-66 0-113-47t-47-113q0-66 47-113t113-47q23 0 42.5 5.5T480-418v-422h240v160H560v400q0 66-47 113t-113 47Z" />
-                    </svg></i>
+                <i class="home_logo material-icons" style="font-size: xx-large;">music_note</i>
                 <h1 class="title">Music App</h1>
                 <p class="description" style="max-width: 420px;">A music app that allows you to listen to your favorite
                     songs, be a creator and release songs, albums and create your own
