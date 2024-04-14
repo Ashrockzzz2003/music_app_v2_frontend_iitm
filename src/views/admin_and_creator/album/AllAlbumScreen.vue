@@ -33,9 +33,9 @@ import { ALL_ALBUMS_URL } from '@/api';
                 </div>
                 <hr />
                 <div class="albumCard__buttons">
-                    <a >
+                    <router-link :to="album.albumEditLink">
                         <i class="material-icons play">edit</i>
-                    </a>
+                    </router-link>
                     <router-link :to="album.albumLink" class="iconRow playButton">
                         <i class="material-icons play">library_music</i>
                         <p class="button-text">View Album</p>
@@ -208,6 +208,7 @@ export default {
                         for (let i = 0; i < this.albumList.length; i++) {
                             this.albumList[i]['albumImageUrl'] = `http://127.0.0.1:5000/static/album/${this.albumList[i]['albumId']}.png`;
                             this.albumList[i]['albumLink'] = `/album/${this.albumList[i]['albumId']}`;
+                            this.albumList[i]['albumEditLink'] = `/album/${this.albumList[i]['albumId']}/update`;
                         }
 
                         this.isLoading = false;

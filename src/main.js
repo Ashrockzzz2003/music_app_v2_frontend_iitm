@@ -26,6 +26,7 @@ import AllAlbumScreen from "./views/admin_and_creator/album/AllAlbumScreen.vue";
 import AlbumScreen from "./views/admin_and_creator/album/AlbumScreen.vue";
 import NewAlbumScreen from "./views/admin_and_creator/album/NewAlbumScreen.vue";
 import AddSongToAlbum from "./views/admin_and_creator/album/AddSongToAlbum.vue";
+import EditAlbumScreen from "./views/admin_and_creator/album/EditAlbumScreen.vue";
 
 const routes = [
   { path: "/", component: HomeScreen },
@@ -47,6 +48,7 @@ const routes = [
   {path: '/album', component: AllAlbumScreen},
   {path: '/album/new', component: NewAlbumScreen},
   {path: '/album/:albumId', component: AlbumScreen},
+  {path: '/album/:albumId/update', component: EditAlbumScreen},
   {path: '/album/:albumId/add-song', component: AddSongToAlbum},
 
 
