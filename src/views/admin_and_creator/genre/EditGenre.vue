@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '@/components/NavBar.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
-import { NEW_GENRE_URL, GENRE_URL_PREFIX } from '@/api';
+import { GENRE_URL_PREFIX } from '@/api';
 </script>
 
 <template>

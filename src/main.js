@@ -22,6 +22,11 @@ import NewLanguage from "./views/admin_and_creator/language/NewLanguage.vue";
 import LanguageScreen from "./views/admin_and_creator/language/LanguageScreen.vue";
 import EditLanguage from "./views/admin_and_creator/language/EditLanguage.vue";
 
+import AllAlbumScreen from "./views/admin_and_creator/album/AllAlbumScreen.vue";
+import AlbumScreen from "./views/admin_and_creator/album/AlbumScreen.vue";
+import NewAlbumScreen from "./views/admin_and_creator/album/NewAlbumScreen.vue";
+import AddSongToAlbum from "./views/admin_and_creator/album/AddSongToAlbum.vue";
+
 const routes = [
   { path: "/", component: HomeScreen },
   { path: "/login", component: LoginScreen },
@@ -38,6 +43,11 @@ const routes = [
   {path: '/language', component: LanguageScreen},
   {path: '/language/new', component: NewLanguage},
   {path: '/language/:languageId/update', component: EditLanguage},
+
+  {path: '/album', component: AllAlbumScreen},
+  {path: '/album/new', component: NewAlbumScreen},
+  {path: '/album/:albumId', component: AlbumScreen},
+  {path: '/album/:albumId/add-song', component: AddSongToAlbum},
 
 
   { path: "/:pathMatch(.*)*", redirect: "/" },

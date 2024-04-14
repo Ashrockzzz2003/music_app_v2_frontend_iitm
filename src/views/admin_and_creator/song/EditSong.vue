@@ -49,7 +49,7 @@ import { ALL_GENRES, ALL_LANGUAGES, SONG_UPDATE_PREFIX } from '@/api';
                     <img :src="imageUrl" alt="Song Cover"
                         style="width: 540px; border-radius: 16px; margin-left: auto; margin-right: auto;" />
                     <p style="text-align: center;">Click the button below to update</p>
-                    <input type="file" name="songImage" id="songImage" accept="image/jpeg" style="width: 540px;" />
+                    <input type="file" name="songImage" id="songImage" accept="image/png" style="width: 540px;" />
                 </div>
                 <div class="input-container">
                     <label for="songAudio">Song Audio File</label>

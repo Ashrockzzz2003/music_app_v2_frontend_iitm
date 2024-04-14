@@ -1,27 +1,23 @@
 <script setup>
 import NavBar from '@/components/NavBar.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
-import { ADMIN_SONG_PREFIX, CREATOR_SONGS_URL, SONG_URL_PREFIX } from '@/api';
+import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
 </script>
 
 <template>
-    <div class="mainScreen">
-        <NavBar />
-        <LoadingScreen v-if="isLoading" />
+    <NavBar />
+    <LoadingScreen v-if="isLoading" />
+    <div class="content" v-else>
+        <h1 style="margin-top: 0; margin-bottom: 2px">{{ albumData.albumName }}</h1>
+        <p style="margin-top: 0; margin-bottom: 2px;">{{ albumData.albumDescription }}</p>
 
-        <div class="content bigButton">
-            <router-link to="/song/new">
-                <i class="material-icons">add_circle</i>
-                <span class="button-text">New Song</span>
-            </router-link>
-        </div>
-
-        <div style="color: white;">
-            <h1>My Songs</h1>
-        </div>
-
-        <div style="color: white;" v-if="!isLoading && songData.length == 0">
-            <p>No Songs Found</p>
+        <div class="row">
+            <div class="bigButton">
+                <router-link :to="newSongToAlbumRoute">
+                    <i class="material-icons">add_circle</i>
+                    <span class="button-text">New Song To Album</span>
+                </router-link>
+            </div>
         </div>
 
         <div v-if="!isLoading" class="songList">
@@ -54,9 +50,6 @@ import { ADMIN_SONG_PREFIX, CREATOR_SONGS_URL, SONG_URL_PREFIX } from '@/api';
                             <i class="material-icons"
                                 @click="lyricsModalPopup(song.songName, song.songLyrics)">lyrics</i>
                         </a>
-                        <router-link :to="song.editSongUrl">
-                            <i class="material-icons">edit</i>
-                        </router-link>
                     </div>
                     <div class="songCard__buttons">
                         <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
@@ -67,25 +60,18 @@ import { ADMIN_SONG_PREFIX, CREATOR_SONGS_URL, SONG_URL_PREFIX } from '@/api';
                         <a style="cursor: pointer" @click="dislikeSong(song.songId)" id="unLikeButton_{{song.songId}}">
                             <i class="material-icons">thumb_down</i>
                         </a>
-                        <a v-if="userRoleId == 1" @click="deleteSong(song.songId)">
-                            <i class="material-icons play">delete</i>
+                    </div>
+                    <div class="songCard__buttons">
+                        <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                            id="likeButton_{{song.songId}}" @click="removeSongFromAlbum(albumData.albumId, song.songId)">
+                            <i class="material-icons">remove_circle</i>
+                            <p class="button-text">Remove song from album</p>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="modal">
-        <div class="modal-content">
-            <div class="form-container">
-                <span class="close" @click="closeModal()">&times;</span>
-                <h2 id="modalTitle"></h2>
-            </div>
-            <p id="lyricsBody"></p>
-        </div>
-    </div>
-
 </template>
 
 <script>
@@ -93,55 +79,49 @@ export default {
     data() {
         return {
             isLoading: true,
+            albumData: {},
             songData: [],
             audioElements: {},
             lastPausedId: null,
+            token: `Bearer ${localStorage.getItem('ma-t')}`,
             userRoleId: localStorage.getItem('ma-ur'),
+            albumId: this.$route.params.albumId,
+            newSongToAlbumRoute: `/album/${this.$route.params.albumId}/add-song`,
         }
     },
     mounted() {
-        this.getCreatorSongs();
+        this.fetchAlbumData();
     },
-
     methods: {
-        logout() {
-            localStorage.clear()
-            this.isLoggedIn = false;
-            this.$router.push('/');
-        },
-        getCreatorSongs() {
+        fetchAlbumData() {
             this.isLoading = true;
-
-            fetch(CREATOR_SONGS_URL, {
-                method: "GET",
+            fetch(ALL_ALBUMS_URL + "/" + this.albumId, {
+                method: 'GET',
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("ma-t"),
-                },
+                    "Authorization": this.token,
+                }
             }).then((res) => {
-                if (res.status === 200) {
+                if (res.status == 200) {
                     res.json().then((data) => {
-
-                        this.songData = data["data"];
-
-                        console.log(this.songData);
+                        this.albumData = data['data'];
+                        this.songData = data['songs'];
 
                         for (let i = 0; i < this.songData.length; i++) {
                             this.songData[i].songImageUrl = `http://127.0.0.1:5000/static/song/poster/${this.songData[i].songId}.png`;
                             this.songData[i].songCardId = `songCard_${this.songData[i].songId}`;
                             this.songData[i].playButtonId = `playButton_${this.songData[i].songId}`;
-                            this.songData[i].editSongUrl = `/song/${this.songData[i].songId}/update`;
-
                         }
 
                         this.isLoading = false;
-                    });
-                } else if (res.status === 401) {
-                    // Logout User
-                    this.logout();
+                    })
+                } else if (res.status == 401) {
+                    localStorage.clear();
+                    this.$router.push('/login');
                 } else {
-                    alert("Something went wrong");
+                    alert('Something went wrong');
                 }
-            });
+            })
+
         },
         lyricsModalPopup(songName, songLyrics) {
             console.log(songName, songLyrics);
@@ -182,6 +162,8 @@ export default {
                 audioElement.addEventListener('ended', () => {
                     this.handlePause(songId);
                 });
+
+                this.markPlayed(songId);
 
                 this.handlePlay(songId);
             }
@@ -311,11 +293,10 @@ export default {
                 this.isLoading = false;
             }
         },
-        async deleteSong(songId) {
-            this.isLoading = true;
+        async markPlayed(songId) {
 
             try {
-                const url = ADMIN_SONG_PREFIX + "/" + songId + '/delete';
+                const url = SONG_URL_PREFIX + "/" + songId + '/play';
 
                 const response = await fetch(url, {
                     method: 'POST',
@@ -325,7 +306,44 @@ export default {
                 });
 
                 if (response.status === 200) {
-                    this.getCreatorSongs();
+                    for (let i = 0; i < this.songData.length; i++) {
+                        if (this.songData[i].songId === songId) {
+                            this.songData[i].songPlaysCount += 1;
+                            break;
+                        }
+                    }
+                } else if (response.status === 401) {
+                    // Logout User
+                    this.logout();
+                } else if (response.status === 400) {
+                    const data = await response.json();
+                    alert(data['message']);
+                } else {
+                    alert('Something went wrong');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Something went wrong');
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        async removeSongFromAlbum(albumId, songId) {
+            this.isLoading = true;
+
+            try {
+                const url = ALL_ALBUMS_URL + "/" + albumId + '/removeSong/' + songId;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("ma-t"),
+                    },
+                });
+
+                if (response.status === 200) {
+                    this.fetchAlbumData();
                 } else if (response.status === 401) {
                     // Logout User
                     this.logout();
