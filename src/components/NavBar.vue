@@ -11,6 +11,8 @@
                     <li v-if="isLoggedIn === false"><router-link to="/login">Login</router-link></li>
 
                     <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/my-songs">My Songs</router-link></li>
+                    <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/genre">Genre</router-link></li>
+                    <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/language">Language</router-link></li>
 
                     <li v-if="isLoggedIn === true"><router-link to="/profile">Profile</router-link></li>
                     <li v-if="isLoggedIn === true"><a href="/" @click="logout">Logout</a></li>

@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '@/components/NavBar.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
-import { CREATOR_SONGS_URL } from '@/api';
+import { CREATOR_SONGS_URL, SONG_URL_PREFIX } from '@/api';
 </script>
 
 <template>
@@ -34,7 +34,7 @@ import { CREATOR_SONGS_URL } from '@/api';
                     </div>
                     <div class="songCard__details">
                         <h3>{{ song.songName }}</h3>
-                        <p style="font-size: small; color: azure; margin: 0; padding: 0;">{{ song.userFullName }}</p>
+                        <p style="font-size: small; color: azure; margin: 0; padding: 0;"> {{ song.genreName }} | {{ song.userFullName }}</p>
                     </div>
                     <hr />
                     <div class="songCard__buttons">
@@ -53,14 +53,17 @@ import { CREATOR_SONGS_URL } from '@/api';
                             <i class="material-icons"
                                 @click="lyricsModalPopup(song.songName, song.songLyrics)">lyrics</i>
                         </a>
+                        <router-link :to="song.editSongUrl">
+                            <i class="material-icons">edit</i>
+                        </router-link>
                     </div>
                     <div class="songCard__buttons">
                         <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
-                            id="likeButton_{{song.songId}}">
+                            id="likeButton_{{song.songId}}" @click="likeSong(song.songId)">
                             <i class="material-icons">thumb_up</i>
                             <p class="button-text">{{ song.likesCount }}</p>
                         </a>
-                        <a style="cursor: pointer" id="unLikeButton_{{song.songId}}">
+                        <a style="cursor: pointer" @click="dislikeSong(song.songId)" id="unLikeButton_{{song.songId}}">
                             <i class="material-icons">thumb_down</i>
                         </a>
                     </div>
@@ -121,6 +124,7 @@ export default {
                             this.songData[i].songImageUrl = `http://127.0.0.1:5000/static/song/poster/${this.songData[i].songId}.png`;
                             this.songData[i].songCardId = `songCard_${this.songData[i].songId}`;
                             this.songData[i].playButtonId = `playButton_${this.songData[i].songId}`;
+                            this.songData[i].editSongUrl = `/song/${this.songData[i].songId}/update`;
 
                         }
 
@@ -227,6 +231,80 @@ export default {
             pauseIcon.classList.toggle('hidden');
             buttonText.innerHTML = 'Play';
             songCard.style.border = '1px solid rgba(41, 42, 45, 0.4)';
+        },
+        async likeSong(songId) {
+            this.isLoading = true;
+
+            try {
+                const url = SONG_URL_PREFIX + "/" + songId + '/like';
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("ma-t"),
+                    },
+                });
+
+                if (response.status === 200) {
+                    for (let i = 0; i < this.songData.length; i++) {
+                        if (this.songData[i].songId === songId) {
+                            this.songData[i].likesCount += 1;
+                            break;
+                        }
+                    }
+                } else if (response.status === 401) {
+                    // Logout User
+                    this.logout();
+                } else if (response.status === 400) {
+                    const data = await response.json();
+                    alert(data['message']);
+                } else {
+                    alert('Something went wrong');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Something went wrong');
+            } finally {
+                this.isLoading = false;
+            }
+
+        },
+
+        async dislikeSong(songId) {
+            this.isLoading = true;
+
+            try {
+                const url = SONG_URL_PREFIX + "/" + songId + '/dislike';
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("ma-t"),
+                    },
+                });
+
+                if (response.status === 200) {
+                    for (let i = 0; i < this.songData.length; i++) {
+                        if (this.songData[i].songId === songId) {
+                            this.songData[i].likesCount -= 1;
+                            break;
+                        }
+                    }
+                } else if (response.status === 401) {
+                    // Logout User
+                    this.logout();
+                } else if (response.status === 400) {
+                    const data = await response.json();
+                    alert(data['message']);
+                } else {
+                    alert('Something went wrong');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Something went wrong');
+            } finally {
+                this.isLoading = false;
+            }
         },
     }
 }

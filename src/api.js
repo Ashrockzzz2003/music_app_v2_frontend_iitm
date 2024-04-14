@@ -6,6 +6,15 @@ export const VERIFY_OTP_URL = `${BASE_URL}/auth/register/verify`;
 
 export const CREATOR_SONGS_URL = `${BASE_URL}/admin/song/my-songs`;
 export const NEW_SONG_URL = `${BASE_URL}/admin/song/create`;
+export const SONG_UPDATE_PREFIX = `${BASE_URL}/admin/song`;
+
+export const NEW_GENRE_URL = `${BASE_URL}/admin/genre/create`;
+export const ALL_GENRE_URL = `${BASE_URL}/admin/genre`;
+export const GENRE_URL_PREFIX = `${BASE_URL}/admin/genre`;
+
+export const NEW_LANGUAGE_URL = `${BASE_URL}/admin/language/create`;
+export const ALL_LANGUAGE_URL = `${BASE_URL}/admin/language`;
+export const LANGUAGE_URL_PREFIX = `${BASE_URL}/admin/language`;
 
 export const ALL_GENRES = `${BASE_URL}/public/genre`;
 export const ALL_LANGUAGES = `${BASE_URL}/public/language`;

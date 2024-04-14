@@ -48,9 +48,26 @@ import { PROFILE_URL, REGISTER_AS_CREATOR_URL, SONG_URL_PREFIX } from '@/api';
             <h2>Become a Creator</h2>
             <p>Upload your songs and share them with the world!</p>
             <div class="bigButton" @click="registerAsCreator">
-                <a >
+                <a>
                     <span class="button-text">Register as Creator</span>
                 </a>
+            </div>
+        </div>
+
+        <div v-if="!isLoading && profileData.userRoleId == 2" class="x-card">
+            <h2>Creator</h2>
+            <p>Upload your songs and share them with the world!</p>
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                <div class="bigButton" style="margin-right: 4px;">
+                    <router-link to="/my-songs">
+                        <span class="button-text">My Songs</span>
+                    </router-link>
+                </div>
+                <div class="bigButton">
+                    <router-link to="/song/new">
+                        <span class="button-text">New Song</span>
+                    </router-link>
+                </div>
             </div>
         </div>
 
@@ -71,7 +88,9 @@ import { PROFILE_URL, REGISTER_AS_CREATOR_URL, SONG_URL_PREFIX } from '@/api';
                     </div>
                     <div class="songCard__details">
                         <h3>{{ song.songName }}</h3>
-                        <p style="font-size: small; color: azure; margin: 0; padding: 0;">{{ song.userFullName }}</p>
+                        <p style="font-size: small; color: azure; margin: 0; padding: 0;">
+                            {{ song.genreName }} | {{ song.userFullName }}
+                        </p>
                     </div>
                     <hr />
                     <div class="songCard__buttons">
@@ -487,7 +506,7 @@ export default {
                     this.profileData = data["data"];
                     localStorage.setItem('ma-t', response['token'] ?? '');
                     localStorage.setItem('ma-ur', 2);
-                
+
                 } else if (response.status === 401) {
                     // Logout User
                     this.logout();

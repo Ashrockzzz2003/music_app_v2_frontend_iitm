@@ -9,7 +9,7 @@ import { ALL_GENRES, ALL_LANGUAGES, NEW_SONG_URL } from '@/api';
     <NavBar />
     <LoadingScreen v-if="isLoading" />
 
-    <div class="content">
+    <div class="content" v-if="!isLoading">
         <div class="form-container">
             <!-- <form action="/song/new" method="POST" enctype="multipart/form-data"> -->
             <form id="the_form" @submit.prevent="submitForm" target="hiddenFrame">
@@ -36,7 +36,7 @@ import { ALL_GENRES, ALL_LANGUAGES, NEW_SONG_URL } from '@/api';
                         {% endfor %} -->
                     </select>
                 </div>
-                <span class="helper">Can't find the language? <a href="/genre/new">Add New Language</a></span>
+                <span class="helper">Can't find the language? <router-link to="/language/new">Add New Language</router-link></span>
                 <div class="input-container">
                     <label for="songImage">Song Cover/Poster</label>
                     <input type="file" name="songImage" id="songImage" accept="image/png" style="width: 540px;"
@@ -73,7 +73,7 @@ import { ALL_GENRES, ALL_LANGUAGES, NEW_SONG_URL } from '@/api';
                 <input type="hidden" name="songImageFileExt" id="songImageFileExt" value="png" />
                 <input type="hidden" name="token" id="token" :value="token"/>
 
-                <span class="helper">Can't find the genre? <a href="/genre/new">Add New Genre</a></span>
+                <span class="helper">Can't find the genre? <router-link to="/genre/new">Add New Genre</router-link></span>
                 <div class="input-container">
                     <input type="submit" title="New Song" />
                 </div>
@@ -139,9 +139,16 @@ export default {
 
             form.submit();
 
-            this.isLoading = false;
+            // timeout of 2 seconds
 
-            this.$router.replace('/my-songs')
+            setTimeout(() => {
+                this.isLoading = true;
+            }, 2000);
+
+            setTimeout(() => {
+                this.$router.replace('/my-songs');
+                this.isLoading = false;
+            }, 4000);
         }
     },
 };
