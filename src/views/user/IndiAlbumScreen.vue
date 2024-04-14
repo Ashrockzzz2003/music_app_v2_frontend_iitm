@@ -11,9 +11,6 @@ import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
         <div class="content" v-else>
             <h1 style="margin-top: 0; margin-bottom: 2px">{{ albumData.albumName }}</h1>
             <p style="margin-top: 0; margin-bottom: 2px;">{{ albumData.albumDescription }}</p>
-            <p style="margin-top: 0; margin-bottom: 2px;">Click on plus icon to add song to album</p>
-
-            <br />
 
             <div v-if="!isLoading" class="songList">
 
@@ -57,17 +54,11 @@ import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
                                 <i class="material-icons">thumb_down</i>
                             </a>
                         </div>
-                        <div class="songCard__buttons">
-                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
-                                id="likeButton_{{song.songId}}" @click="addSongToAlbum(albumData.albumId, song.songId)">
-                                <i class="material-icons">add_circle</i>
-                                <p class="button-text">Add Song To Album</p>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="modal">
@@ -93,6 +84,7 @@ export default {
             token: `Bearer ${localStorage.getItem('ma-t')}`,
             userRoleId: localStorage.getItem('ma-ur'),
             albumId: this.$route.params.albumId,
+            newSongToAlbumRoute: `/album/${this.$route.params.albumId}/add-song`,
         }
     },
     mounted() {
@@ -101,7 +93,7 @@ export default {
     methods: {
         fetchAlbumData() {
             this.isLoading = true;
-            fetch(ALL_ALBUMS_URL + "/" + this.albumId + "/songs-not-in-album", {
+            fetch(ALL_ALBUMS_URL + "/" + this.albumId, {
                 method: 'GET',
                 headers: {
                     "Authorization": this.token,
@@ -113,7 +105,6 @@ export default {
                         this.songData = data['songs'];
 
                         for (let i = 0; i < this.songData.length; i++) {
-                            console.log(this.songData[i]);
                             this.songData[i].songImageUrl = `http://127.0.0.1:5000/static/song/poster/${this.songData[i].songId}.png`;
                             this.songData[i].songCardId = `songCard_${this.songData[i].songId}`;
                             this.songData[i].playButtonId = `playButton_${this.songData[i].songId}`;
@@ -313,9 +304,9 @@ export default {
                 });
 
                 if (response.status === 200) {
-                    for (let i = 0; i < this.watchHistory.length; i++) {
-                        if (this.watchHistory[i].songId === songId) {
-                            this.watchHistory[i].songPlaysCount += 1;
+                    for (let i = 0; i < this.songData.length; i++) {
+                        if (this.songData[i].songId === songId) {
+                            this.songData[i].songPlaysCount += 1;
                             break;
                         }
                     }
@@ -334,38 +325,6 @@ export default {
             } finally {
                 this.isLoading = false;
             }
-        },
-        async addSongToAlbum(albumId, songId) {
-            this.isLoading = true;
-
-            try {
-                const url = ALL_ALBUMS_URL + "/" + albumId + '/addSong/' + songId;
-
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        "Authorization": "Bearer " + localStorage.getItem("ma-t"),
-                    },
-                });
-
-                if (response.status === 200) {
-                    this.fetchAlbumData();
-                } else if (response.status === 401) {
-                    // Logout User
-                    this.logout();
-                } else if (response.status === 400) {
-                    const data = await response.json();
-                    alert(data['message']);
-                } else {
-                    alert('Something went wrong');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Something went wrong');
-            } finally {
-                this.isLoading = false;
-            }
-
         },
     }
 }

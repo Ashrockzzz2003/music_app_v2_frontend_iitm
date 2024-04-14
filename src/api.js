@@ -19,6 +19,7 @@ export const NEW_LANGUAGE_URL = `${BASE_URL}/admin/language/create`;
 export const ALL_LANGUAGE_URL = `${BASE_URL}/admin/language`;
 export const LANGUAGE_URL_PREFIX = `${BASE_URL}/admin/language`;
 
+export const ALBUM_SEARCH_URL = `${BASE_URL}/public/album/search`;
 export const ALL_ALBUMS_URL = `${BASE_URL}/admin/album`;
 export const NEW_ALBUM_URL = `${BASE_URL}/admin/album/create`;
 

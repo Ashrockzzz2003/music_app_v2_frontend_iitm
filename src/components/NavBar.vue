@@ -8,6 +8,7 @@
                 </router-link>
                 <span class="menu">
                     <li v-if="isLoggedIn === true"><router-link to="/song">Music</router-link></li>
+                    <li v-if="isLoggedIn === true"><router-link to="/album/search">Album</router-link></li>
 
                     <li v-if="isLoggedIn === false"><router-link to="/register">Register</router-link></li>
                     <li v-if="isLoggedIn === false"><router-link to="/login">Login</router-link></li>

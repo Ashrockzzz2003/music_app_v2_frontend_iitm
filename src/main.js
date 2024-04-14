@@ -28,6 +28,8 @@ import NewAlbumScreen from "./views/admin_and_creator/album/NewAlbumScreen.vue";
 import AddSongToAlbum from "./views/admin_and_creator/album/AddSongToAlbum.vue";
 import EditAlbumScreen from "./views/admin_and_creator/album/EditAlbumScreen.vue";
 import SongQueryScreen from "./views/user/SongQueryScreen.vue";
+import AlbumQueryScreen from "./views/user/AlbumQueryScreen.vue";
+import IndiAlbumScreen from "./views/user/IndiAlbumScreen.vue";
 
 const routes = [
   { path: "/", component: HomeScreen },
@@ -49,6 +51,8 @@ const routes = [
   {path: '/language/:languageId/update', component: EditLanguage},
 
   {path: '/album', component: AllAlbumScreen},
+  {path: '/album/search', component: AlbumQueryScreen},
+  {path: '/album/search/:albumId', component: IndiAlbumScreen},
   {path: '/album/new', component: NewAlbumScreen},
   {path: '/album/:albumId', component: AlbumScreen},
   {path: '/album/:albumId/update', component: EditAlbumScreen},

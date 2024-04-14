@@ -5,71 +5,85 @@ import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
 </script>
 
 <template>
-    <NavBar />
-    <LoadingScreen v-if="isLoading" />
-    <div class="content" v-else>
-        <h1 style="margin-top: 0; margin-bottom: 2px">{{ albumData.albumName }}</h1>
-        <p style="margin-top: 0; margin-bottom: 2px;">{{ albumData.albumDescription }}</p>
+    <div class="mainScreen">
+        <NavBar />
+        <LoadingScreen v-if="isLoading" />
+        <div class="content" v-else>
+            <h1 style="margin-top: 0; margin-bottom: 2px">{{ albumData.albumName }}</h1>
+            <p style="margin-top: 0; margin-bottom: 2px;">{{ albumData.albumDescription }}</p>
 
-        <div class="row">
-            <div class="bigButton">
-                <router-link :to="newSongToAlbumRoute">
-                    <i class="material-icons">add_circle</i>
-                    <span class="button-text">New Song To Album</span>
-                </router-link>
+            <div class="row">
+                <div class="bigButton">
+                    <router-link :to="newSongToAlbumRoute">
+                        <i class="material-icons">add_circle</i>
+                        <span class="button-text">New Song To Album</span>
+                    </router-link>
+                </div>
             </div>
-        </div>
 
-        <div v-if="!isLoading" class="songList">
+            <div v-if="!isLoading" class="songList">
 
-            <div v-if="!isLoading && songData.length > 0" v-for="song in songData" :key="song.songId"
-                id="songListElement">
-                <div class="songCard" :id="song.songCardId">
-                    <div class="songCard__image">
-                        <img :src="song.songImageUrl" alt="Song Image">
-                    </div>
-                    <div class="songCard__details">
-                        <h3>{{ song.songName }}</h3>
-                        <p style="font-size: small; color: azure; margin: 0; padding: 0;"> {{ song.genreName }} | {{
-                            song.userFullName }}</p>
-                    </div>
-                    <hr />
-                    <div class="songCard__buttons">
-                        <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
-                            id="likeButton_{{song.songId}}">
-                            <i class="material-icons">visibility</i>
-                            <p class="button-text">{{ song.songPlaysCount }}</p>
-                        </a>
-                        <div class="iconRow playButton" :id="song.playButtonId"
-                            @click="handlePlayPause(song.songId, `mp3`)">
-                            <i class="material-icons play">play_arrow</i>
-                            <i class="material-icons pause hidden">pause</i>
-                            <p class="button-text">Play</p>
+                <div v-if="!isLoading && songData.length > 0" v-for="song in songData" :key="song.songId"
+                    id="songListElement">
+                    <div class="songCard" :id="song.songCardId">
+                        <div class="songCard__image">
+                            <img :src="song.songImageUrl" alt="Song Image">
                         </div>
-                        <a>
-                            <i class="material-icons"
-                                @click="lyricsModalPopup(song.songName, song.songLyrics)">lyrics</i>
-                        </a>
-                    </div>
-                    <div class="songCard__buttons">
-                        <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
-                            id="likeButton_{{song.songId}}" @click="likeSong(song.songId)">
-                            <i class="material-icons">thumb_up</i>
-                            <p class="button-text">{{ song.likesCount }}</p>
-                        </a>
-                        <a style="cursor: pointer" @click="dislikeSong(song.songId)" id="unLikeButton_{{song.songId}}">
-                            <i class="material-icons">thumb_down</i>
-                        </a>
-                    </div>
-                    <div class="songCard__buttons">
-                        <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
-                            id="likeButton_{{song.songId}}" @click="removeSongFromAlbum(albumData.albumId, song.songId)">
-                            <i class="material-icons">remove_circle</i>
-                            <p class="button-text">Remove song from album</p>
-                        </a>
+                        <div class="songCard__details">
+                            <h3>{{ song.songName }}</h3>
+                            <p style="font-size: small; color: azure; margin: 0; padding: 0;"> {{ song.genreName }} | {{
+                                song.userFullName }}</p>
+                        </div>
+                        <hr />
+                        <div class="songCard__buttons">
+                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                                id="likeButton_{{song.songId}}">
+                                <i class="material-icons">visibility</i>
+                                <p class="button-text">{{ song.songPlaysCount }}</p>
+                            </a>
+                            <div class="iconRow playButton" :id="song.playButtonId"
+                                @click="handlePlayPause(song.songId, `mp3`)">
+                                <i class="material-icons play">play_arrow</i>
+                                <i class="material-icons pause hidden">pause</i>
+                                <p class="button-text">Play</p>
+                            </div>
+                            <a>
+                                <i class="material-icons"
+                                    @click="lyricsModalPopup(song.songName, song.songLyrics)">lyrics</i>
+                            </a>
+                        </div>
+                        <div class="songCard__buttons">
+                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                                id="likeButton_{{song.songId}}" @click="likeSong(song.songId)">
+                                <i class="material-icons">thumb_up</i>
+                                <p class="button-text">{{ song.likesCount }}</p>
+                            </a>
+                            <a style="cursor: pointer" @click="dislikeSong(song.songId)"
+                                id="unLikeButton_{{song.songId}}">
+                                <i class="material-icons">thumb_down</i>
+                            </a>
+                        </div>
+                        <div class="songCard__buttons">
+                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                                id="likeButton_{{song.songId}}"
+                                @click="removeSongFromAlbum(albumData.albumId, song.songId)">
+                                <i class="material-icons">remove_circle</i>
+                                <p class="button-text">Remove song from album</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal">
+        <div class="modal-content">
+            <div class="form-container">
+                <span class="close" @click="closeModal()">&times;</span>
+                <h2 id="modalTitle"></h2>
+            </div>
+            <p id="lyricsBody"></p>
         </div>
     </div>
 </template>
