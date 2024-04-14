@@ -27,12 +27,15 @@ import AlbumScreen from "./views/admin_and_creator/album/AlbumScreen.vue";
 import NewAlbumScreen from "./views/admin_and_creator/album/NewAlbumScreen.vue";
 import AddSongToAlbum from "./views/admin_and_creator/album/AddSongToAlbum.vue";
 import EditAlbumScreen from "./views/admin_and_creator/album/EditAlbumScreen.vue";
+import SongQueryScreen from "./views/user/SongQueryScreen.vue";
 
 const routes = [
   { path: "/", component: HomeScreen },
   { path: "/login", component: LoginScreen },
   { path: "/register", component: RegisterScreen },
   { path: "/profile", component: ProfileScreen },
+  
+  { path: "/song", component: SongQueryScreen },
   { path: "/my-songs", component: MySongsScreen },
   { path: "/song/new", component: NewSongScreen },
   { path: "/song/:songId/update", component: EditSong },
