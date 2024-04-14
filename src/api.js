@@ -30,3 +30,6 @@ export const PROFILE_URL = `${BASE_URL}/user/profile`;
 export const REGISTER_AS_CREATOR_URL = `${BASE_URL}/user/i-wanna-be-creator`;
 export const SONG_URL_PREFIX = `${BASE_URL}/user/song`;
 
+export const NEW_PLAYLIST_URL = `${BASE_URL}/user/playlist/create`;
+export const ALL_PLAYLIST_URL = `${BASE_URL}/user/playlist`;
+

@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '@/components/NavBar.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
-import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
+import { ADMIN_SONG_PREFIX, ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
 </script>
 
 <template>
@@ -25,7 +25,7 @@ import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
 
                 <div v-if="!isLoading && songData.length > 0" v-for="song in songData" :key="song.songId"
                     id="songListElement">
-                    <div class="songCard" :id="song.songCardId">
+                    <div class="songCard" :id="song.songCardId" v-if="song.isActive == '1'">
                         <div class="songCard__image">
                             <img :src="song.songImageUrl" alt="Song Image">
                         </div>
@@ -69,6 +69,55 @@ import { ALL_ALBUMS_URL, SONG_URL_PREFIX } from '@/api';
                                 @click="removeSongFromAlbum(albumData.albumId, song.songId)">
                                 <i class="material-icons">remove_circle</i>
                                 <p class="button-text">Remove song from album</p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="songCard" style="border: red 1px solid;" :id="song.songCardId" v-else>
+                        <div class="songCard__image">
+                            <img :src="song.songImageUrl" alt="Song Image">
+                        </div>
+                        <div class="songCard__details">
+                            <h3>{{ song.songName }}</h3>
+                            <p style="font-size: small; color: azure; margin: 0; padding: 0;"> {{ song.genreName }} | {{
+                                song.userFullName }}</p>
+                        </div>
+                        <hr />
+                        <div class="songCard__buttons">
+                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                                id="likeButton_{{song.songId}}">
+                                <i class="material-icons">visibility</i>
+                                <p class="button-text">{{ song.songPlaysCount }}</p>
+                            </a>
+                            <div class="iconRow playButton" :id="song.playButtonId"
+                                @click="handlePlayPause(song.songId, `mp3`)">
+                                <i class="material-icons play">play_arrow</i>
+                                <i class="material-icons pause hidden">pause</i>
+                                <p class="button-text">Play</p>
+                            </div>
+                            <a>
+                                <i class="material-icons"
+                                    @click="lyricsModalPopup(song.songName, song.songLyrics)">lyrics</i>
+                            </a>
+                        </div>
+                        <div class="songCard__buttons">
+                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                                id="likeButton_{{song.songId}}" @click="likeSong(song.songId)">
+                                <i class="material-icons">thumb_up</i>
+                                <p class="button-text">{{ song.likesCount }}</p>
+                            </a>
+                            <a style="cursor: pointer" @click="dislikeSong(song.songId)"
+                                id="unLikeButton_{{song.songId}}">
+                                <i class="material-icons">thumb_down</i>
+                            </a>
+                        </div>
+                        <p style="color: red; text-align: center; margin: 0;">This song is flagged by Admin</p>
+                        <p style="color: grey; font-size: x-small; text-align: center;">It will not be shown to users.
+                        </p>
+                        <div class="songCard__buttons" v-if="userRoleId == 1">
+                            <a class="iconRow playButton" style="cursor: pointer; background-image: none; color: white;"
+                                id="likeButton_{{song.songId}}" @click="flagSong(song.songId)">
+                                <i class="material-icons">verified</i>
+                                <p class="button-text">RePublish Song</p>
                             </a>
                         </div>
                     </div>
@@ -348,6 +397,37 @@ export default {
 
             try {
                 const url = ALL_ALBUMS_URL + "/" + albumId + '/removeSong/' + songId;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("ma-t"),
+                    },
+                });
+
+                if (response.status === 200) {
+                    this.fetchAlbumData();
+                } else if (response.status === 401) {
+                    // Logout User
+                    this.logout();
+                } else if (response.status === 400) {
+                    const data = await response.json();
+                    alert(data['message']);
+                } else {
+                    alert('Something went wrong');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Something went wrong');
+            } finally {
+                this.isLoading = false;
+            }
+
+        },
+        async flagSong(songId) {
+            this.isLoading = true;
+            try {
+                const url = ADMIN_SONG_PREFIX + "/" + songId + '/toggle-status';
 
                 const response = await fetch(url, {
                     method: 'POST',

@@ -30,6 +30,12 @@ import EditAlbumScreen from "./views/admin_and_creator/album/EditAlbumScreen.vue
 import SongQueryScreen from "./views/user/SongQueryScreen.vue";
 import AlbumQueryScreen from "./views/user/AlbumQueryScreen.vue";
 import IndiAlbumScreen from "./views/user/IndiAlbumScreen.vue";
+import NewPlaylist from "./views/user/playlist/NewPlaylist.vue";
+import PlaylistScreen from "./views/user/playlist/PlaylistScreen.vue";
+import AllPlaylist from "./views/user/playlist/AllPlaylist.vue";
+import AddSongToPlaylist from "./views/user/playlist/AddSongToPlaylist.vue";
+import EditPlaylist from "./views/user/playlist/EditPlaylist.vue";
+import RemoveSongFromPlaylist from "./views/user/playlist/RemoveSongFromPlaylist.vue";
 
 const routes = [
   { path: "/", component: HomeScreen },
@@ -58,6 +64,12 @@ const routes = [
   {path: '/album/:albumId/update', component: EditAlbumScreen},
   {path: '/album/:albumId/add-song', component: AddSongToAlbum},
 
+  {path: '/playlist', component: AllPlaylist},
+  {path:'/playlist/new', component: NewPlaylist},
+  {path: '/playlist/:playlistId', component: PlaylistScreen},
+  {path: '/playlist/:playlistId/add-song', component: AddSongToPlaylist},
+  {path: '/playlist/:playlistId/update', component: EditPlaylist},
+  {path: '/playlist/:playlistId/remove-song', component: RemoveSongFromPlaylist},
 
   { path: "/:pathMatch(.*)*", redirect: "/" },
 ];

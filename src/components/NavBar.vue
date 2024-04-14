@@ -7,13 +7,14 @@
                     <span class="logo-text">Music App</span>
                 </router-link>
                 <span class="menu">
-                    <li v-if="isLoggedIn === true"><router-link to="/song">Music</router-link></li>
-                    <li v-if="isLoggedIn === true"><router-link to="/album/search">Album</router-link></li>
+                    <li v-if="isLoggedIn === true && userRoleId != 1"><router-link to="/song">Music</router-link></li>
+                    <li v-if="isLoggedIn === true && userRoleId != 1"><router-link to="/album/search">Album</router-link></li>
+                    <li v-if="isLoggedIn === true"><router-link to="/playlist">Playlist</router-link></li>
 
                     <li v-if="isLoggedIn === false"><router-link to="/register">Register</router-link></li>
                     <li v-if="isLoggedIn === false"><router-link to="/login">Login</router-link></li>
 
-                    <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/my-songs">My Songs</router-link></li>
+                    <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/my-songs">{{ userRoleId == 2 ? "My Songs" : "Songs"}}</router-link></li>
                     <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/album">{{ userRoleId == 2 ? "My Albums" : "Albums"}}</router-link></li>
                     <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/genre">Genre</router-link></li>
                     <li v-if="(userRoleId == 2 || userRoleId == 1)"><router-link to="/language">Language</router-link></li>

@@ -259,6 +259,7 @@ export default {
                     this.handlePause(songId);
                 });
 
+                this.markPlayed(songId);
                 this.handlePlay(songId);
             }
         },
@@ -368,6 +369,42 @@ export default {
                     for (let i = 0; i < this.songData.length; i++) {
                         if (this.songData[i].songId === songId) {
                             this.songData[i].likesCount -= 1;
+                            break;
+                        }
+                    }
+                } else if (response.status === 401) {
+                    // Logout User
+                    this.logout();
+                } else if (response.status === 400) {
+                    const data = await response.json();
+                    alert(data['message']);
+                } else {
+                    alert('Something went wrong');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Something went wrong');
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        async markPlayed(songId) {
+
+            try {
+                const url = SONG_URL_PREFIX + "/" + songId + '/play';
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("ma-t"),
+                    },
+                });
+
+                if (response.status === 200) {
+                    for (let i = 0; i < this.songData.length; i++) {
+                        if (this.songData[i].songId === songId) {
+                            this.songData[i].songPlaysCount += 1;
                             break;
                         }
                     }

@@ -135,7 +135,6 @@ export default {
             form.method = 'POST';
 
             form.enctype = 'multipart/form-data';
-            this.isLoading = true;
 
             form.submit();
 
@@ -143,7 +142,7 @@ export default {
 
             setTimeout(() => {
                 this.isLoading = true;
-            }, 2000);
+            }, 3000);
 
             setTimeout(() => {
                 this.$router.replace('/my-songs');

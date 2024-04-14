@@ -135,6 +135,7 @@ export default {
                     localStorage.setItem('ma-t', data['token'] ?? '');
                     localStorage.setItem('ma-ue', this.userEmail);
                     localStorage.setItem('ma-ur', data['userRoleId'] ?? -1);
+                    localStorage.setItem('ma-uid', data['userId'] ?? -1);
 
                     this.$router.push('/profile');
 
