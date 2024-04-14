@@ -503,9 +503,13 @@ export default {
 
                 if (response.status === 200) {
 
+                    const data = await response.json();
+
                     this.profileData = data["data"];
                     localStorage.setItem('ma-t', response['token'] ?? '');
                     localStorage.setItem('ma-ur', 2);
+
+                    this.$router.push('/profile');
 
                 } else if (response.status === 401) {
                     // Logout User
