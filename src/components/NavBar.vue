@@ -7,6 +7,7 @@
                     <span class="logo-text">Music App</span>
                 </router-link>
                 <span class="menu">
+                    <li v-if="isLoggedIn === true && userRoleId == 1"><router-link to="/stats">Stats</router-link></li>
                     <li v-if="isLoggedIn === true && userRoleId != 1"><router-link to="/song">Music</router-link></li>
                     <li v-if="isLoggedIn === true && userRoleId != 1"><router-link to="/album/search">Album</router-link></li>
                     <li v-if="isLoggedIn === true"><router-link to="/playlist">Playlist</router-link></li>

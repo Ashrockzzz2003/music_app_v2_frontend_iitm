@@ -36,6 +36,7 @@ import AllPlaylist from "./views/user/playlist/AllPlaylist.vue";
 import AddSongToPlaylist from "./views/user/playlist/AddSongToPlaylist.vue";
 import EditPlaylist from "./views/user/playlist/EditPlaylist.vue";
 import RemoveSongFromPlaylist from "./views/user/playlist/RemoveSongFromPlaylist.vue";
+import StatsScreen from "./views/StatsScreen.vue";
 
 const routes = [
   { path: "/", component: HomeScreen },
@@ -70,6 +71,9 @@ const routes = [
   {path: '/playlist/:playlistId/add-song', component: AddSongToPlaylist},
   {path: '/playlist/:playlistId/update', component: EditPlaylist},
   {path: '/playlist/:playlistId/remove-song', component: RemoveSongFromPlaylist},
+
+  {path: '/stats', component: StatsScreen},
+
 
   { path: "/:pathMatch(.*)*", redirect: "/" },
 ];
